@@ -1,0 +1,23 @@
+{
+  "name": "chatbot",
+  "version": "1.0.0",
+  "description": "build a chat bot using microsoft bot framework",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SarahSexton/ChatBot.git"
+  },
+  "author": "Sarah Sexton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SarahSexton/ChatBot/issues"
+  },
+  "homepage": "https://github.com/SarahSexton/ChatBot#readme",
+  "dependencies": {
+    "botbuilder": "^0.8.0",
+    "restify": "^4.0.4"
+  }
+}

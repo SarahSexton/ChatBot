@@ -1,8 +1,8 @@
 # #Markdown Syntax
-## ##Headers
+## Headers
 #####This is an h5 tag
 
-## ##Emphasis
+## Emphasis
 ** \*\*This text will be bold****
 
 \**This text will be italic*\*

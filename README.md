@@ -1,20 +1,5 @@
-# #Markdown Syntax
-## Headers
-#####This is an h5 tag
+# SarahSaysBot Demo
 
-## Emphasis
-** \*\*This text will be bold****
+Demo chat bot using Microsoft Bot Framework with LUIS and web chat iFrame.
 
-\**This text will be italic*\*
-
-## ##Lists
-####Unordered list 
-* \*Item 1
-  * \*  Item a 
-
-####Ordered list 
-1. Item 1
-2. Item 2
-  * Item 2a
-  * Item 2b
-  * Iten 3b
+Browse http://sarahsaysbot.azurewebsites.net to talk to the bot.

@@ -1,15 +1,54 @@
+//Add your requirements
 var restify = require('restify');
 var builder = require('botbuilder');
-
-// Create bot and add dialogs
-var bot = new builder.BotConnectorBot({ appId: 'YourAppId', appSecret: 'YourAppSecret' });
-bot.add('/', function (session) {
-    session.send('Hello World');
-});
+const dotenv = require("dotenv");
+dotenv.load();
 
 // Setup Restify Server
 var server = restify.createServer();
-server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
-server.listen(process.env.port || 3978, function () {
-    console.log('%s listening to %s', server.name, server.url); 
+server.listen(process.env.port || process.env.PORT || 3978, function () {
+    console.log('%s listening to %s', server.name, server.url);
 });
+
+//Static web page for online iFrame chat
+server.get('/', restify.plugins.serveStatic({
+    directory: __dirname,
+    default: '/index.html'
+}));
+
+// Create chat connector for communicating with the Bot Framework Service
+var connector = new builder.ChatConnector({
+    AppID: process.env.AppID,
+    AppPassword: process.env.AppPassword
+});
+
+// Listen for messages from users 
+server.post('/api/messages', connector.listen());
+
+var bot = new builder.UniversalBot(connector);
+
+// Set up LUIS connection
+var model = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/' + process.env.LUISID + '?subscription-key=' + process.env.LUISKEY + '&verbose=true&timezoneOffset=0&q='
+var recognizer = new builder.LuisRecognizer(model)
+var dialog = new builder.IntentDialog({ recognizers: [recognizer] })
+
+bot.dialog('/', dialog)
+
+dialog.matches('greeting', [
+    function (session, results) {
+        session.send('Hello!')
+    }
+])
+
+dialog.matches('farewell', [
+    function (session, results) {
+        session.send('Bye!')
+    }
+])
+
+dialog.onDefault([
+    function (session, results) {
+        session.send("That one didn't work.")
+        session.beginDialog('/', results)
+    }
+])

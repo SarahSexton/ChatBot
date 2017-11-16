@@ -10,10 +10,10 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log('%s listening to %s', server.name, server.url);
 });
 
-//Static web page for online iFrame chat
-server.get('/', restify.plugins.serveStatic({
-    directory: __dirname,
-    default: '/index.html'
+// Serve a static web page
+server.get(/.*/, restify.plugins.serveStatic({
+    'directory': '.',
+    'default': 'index.html'
 }));
 
 // Create chat connector for communicating with the Bot Framework Service

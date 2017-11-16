@@ -1,8 +1,20 @@
 //Add your requirements
 var restify = require('restify');
 var builder = require('botbuilder');
+var azure = require('botbuilder-azure');
 const dotenv = require("dotenv");
 dotenv.load();
+
+var documentDbOptions = {
+    host: process.env.host, 
+    masterKey: process.env.masterKey, 
+    database: 'botdocs',   
+    collection: 'botdata'
+};
+
+var docDbClient = new azure.DocumentDbClient(documentDbOptions);
+
+var cosmosStorage = new azure.AzureBotStorage({ gzipData: false }, docDbClient);
 
 // Setup Restify Server
 var server = restify.createServer();
@@ -25,7 +37,7 @@ var connector = new builder.ChatConnector({
 // Listen for messages from users 
 server.post('/api/messages', connector.listen());
 
-var bot = new builder.UniversalBot(connector);
+var bot = new builder.UniversalBot(connector).set('storage', cosmosStorage);
 
 // Set up LUIS connection
 var model = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/' + process.env.LUISID + '?subscription-key=' + process.env.LUISKEY + '&verbose=true&timezoneOffset=0&q='

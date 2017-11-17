@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/SarahSexton/ChatBot#readme",
   "dependencies": {
-    "botbuilder": "^3.12.0",
+    "botbuilder": "3.11.0",
     "botbuilder-azure": "^3.0.4",
     "dotenv": "^4.0.0",
     "restify": "^6.3.2"

@@ -1,20 +1,8 @@
 //Add your requirements
 var restify = require('restify');
 var builder = require('botbuilder');
-var azure = require('botbuilder-azure');
 const dotenv = require("dotenv");
 dotenv.load();
-
-var documentDbOptions = {
-    host: process.env.host, 
-    masterKey: process.env.masterKey, 
-    database: 'botdocs',   
-    collection: 'botdata'
-};
-
-var docDbClient = new azure.DocumentDbClient(documentDbOptions);
-
-var cosmosStorage = new azure.AzureBotStorage({ gzipData: false }, docDbClient);
 
 // Setup Restify Server
 var server = restify.createServer();
@@ -30,25 +18,27 @@ server.get(/.*/, restify.plugins.serveStatic({
 
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
-    AppID: process.env.AppID,
-    AppPassword: process.env.AppPassword
+    appId: process.env.AppID,
+    appPassword: process.env.AppPassword
 });
-
+//console.log(connector);
 // Listen for messages from users 
 server.post('/api/messages', connector.listen());
 
-var bot = new builder.UniversalBot(connector).set('storage', cosmosStorage);
+var bot = new builder.UniversalBot(connector);
 
 // Set up LUIS connection
 var model = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/' + process.env.LUISID + '?subscription-key=' + process.env.LUISKEY + '&verbose=true&timezoneOffset=0&q='
 var recognizer = new builder.LuisRecognizer(model)
 var dialog = new builder.IntentDialog({ recognizers: [recognizer] })
 
-bot.dialog('/', dialog)
+bot.dialog('/', dialog);
 
 dialog.matches('greeting', [
-    function (session, results) {
-        session.send('Hello!')
+    function (session, args, next) {
+        session.send('Hello!');
+        console.log('Hello!');
+        console.log(session);
     }
 ])
 
